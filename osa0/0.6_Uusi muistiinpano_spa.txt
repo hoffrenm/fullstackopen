@@ -1,0 +1,20 @@
+title Uusi muistiinpano spa-versiossa
+
+note over selain:
+Käyttäjä syöttää lomakkeeseen tekstiä
+ja painaa tallennuspainiketta
+end note
+
+note over selain:
+Selain tallettaa muistiinpanon listaan, renderöi listan uudelleen ja
+lähettää muistiinpanon JSON-muodossa palvelimelle
+end note
+
+selain->palvelin: HTTP POST: https://fullstack-exampleapp.herokuapp.com/new_note_spa
+
+note over palvelin:
+Palvelin käsittelee pyynnön ja palauttaa selaimelle
+viestin muistiinpanon tallennuksesta
+end note
+
+palvelin-->selain: HTTP status 201: {"message":"note created"}

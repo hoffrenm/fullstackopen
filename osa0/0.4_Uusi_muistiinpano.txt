@@ -1,0 +1,40 @@
+title Uusi muistiinpano
+
+note over selain:
+Käyttäjä syöttää lomakkeeseen tekstiä
+ja painaa tallennuspainiketta
+end note
+
+selain->palvelin: HTTP POST: https://fullstack-exampleapp.herokuapp.com/new_note
+
+note over palvelin:
+Palvelin käsittelee pyynnön ja palauttaa
+selaimelle uudelleenohjauspyynnön
+end note
+
+palvelin-->selain: HTTP status 302: redirect /notes
+selain->palvelin: HTTP GET: https://fullstack-exampleapp.herokuapp.com/notes
+palvelin-->selain: HTTP status 200: html-dokumentti
+
+note over selain:
+Html-dokumentin <head> tagissä oleva metadata aiheuttaa
+pyynnöt tyyli- ja js-tiedostolle
+end note
+
+selain->palvelin: HTTP GET: https://fullstack-exampleapp.herokuapp.com/main.css
+palvelin->selain: HTTP status 200: main.css
+selain->palvelin: HTTP GET: https://fullstack-exampleapp.herokuapp.com/main.js
+palvelin-->selain:HTTP status 200: main.js
+
+note over selain:
+Selain suorittaa palvelimelta vastaanotetun js-koodin,
+joka aiheuttaa pyynnön, jolla haetaan muistiinpanot
+end note
+
+selain->palvelin: HTTP GET: https://fullstack-exampleapp.herokuapp.com/data.json
+palvelin-->selain:HTTP status 200: data.json
+
+note over selain:
+Js-koodissa oleva tapahtumankäsittelijän koodi suoritetaan ja
+data.json sisältämät muistiinpanot lisätään listaan ja renderöidään näytölle
+end note
