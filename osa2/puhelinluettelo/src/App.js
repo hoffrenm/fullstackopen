@@ -3,11 +3,13 @@ import Persons from "./components/Persons.js";
 import Filter from "./components/Filter.js";
 import Personform from "./components/Personform.js";
 import personService from "./services/persons.js";
+import Notification from "./components/Notification.js";
 
 const App = () => {
   const [persons, setPersons] = useState([]);
   const [newName, setNewName] = useState("Enter name");
   const [newNumber, setNewNumber] = useState("Enter number");
+  const [notification, setNotification] = useState({ message: "", type:"" });
   const [filter, setFilter] = useState("");
 
   useEffect(() => {
@@ -30,9 +32,19 @@ const App = () => {
     const personToBeRemoved = persons.find(p => p.id === id);
 
     if (window.confirm(`You are removing ${personToBeRemoved.name}`)) {
-      personService.remove(id);
+      personService
+        .remove(id)
+        .then(res => {
+          setNotification({message: `${personToBeRemoved.name} has been removed`, type:"success" })
+          setTimeout(() => setNotification({ message: null }), 5000)
+        })
+        .catch(error => {
+          setNotification({ message: `${personToBeRemoved.name} were already removed`, type: "error" });
+          setTimeout(() => setNotification({ message: null }), 5000);
+        });
+
       setPersons(persons.filter(p => p.id !== id));
-    }
+    };
   };
 
   const addPerson = event => {
@@ -47,9 +59,15 @@ const App = () => {
         personService
           .update(existingPerson.id, modifiedPerson)
           .then(newPerson => {
-            setPersons(
-              persons.map(p => (p.id !== existingPerson.id ? p : newPerson))
-            )
+            setPersons(persons.map(p => (p.id !== existingPerson.id ? p : newPerson)))
+            setNotification({ message:`${newPerson.name}'s number has been changed to ${newPerson.number}`, type: "success" });
+            setTimeout(() => setNotification({ message: null }), 5000);
+          })
+          .catch(error => {
+            console.log(error);
+            setPersons(persons.filter(p => p.id !== existingPerson.id));
+            setNotification({ message: "Person you tried to edit were somehow deleted, no changes were made", type: "fail" });
+            setTimeout(() => setNotification({ message: null }),5000);
           });
       } else {
         // Do nothing
@@ -61,9 +79,11 @@ const App = () => {
       };
 
       personService
-      . create(personObject)
+        .create(personObject)
         .then(addedPerson => {
           setPersons(persons.concat(addedPerson));
+          setNotification({ message: `${addedPerson.name} has been added to the phonebook`, type: "success" });
+          setTimeout(() => setNotification({ message: null }), 5000);
           setNewName("");
           setNewNumber("");
       });
@@ -72,6 +92,8 @@ const App = () => {
 
   return (
     <div>
+      <Notification notification={notification} />
+
       <h1>Phonebook</h1>
       <Filter handleChange={handleFilterChange} />
 
