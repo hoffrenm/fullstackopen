@@ -35,8 +35,8 @@ const App = () => {
       personService
         .remove(id)
         .then(res => {
-          setNotification({message: `${personToBeRemoved.name} has been removed`, type:"success" })
-          setTimeout(() => setNotification({ message: null }), 5000)
+          setNotification({message: `${personToBeRemoved.name} has been removed`, type:"success" });
+          setTimeout(() => setNotification({ message: null }), 5000);
         })
         .catch(error => {
           setNotification({ message: `${personToBeRemoved.name} were already removed`, type: "error" });
@@ -59,7 +59,7 @@ const App = () => {
         personService
           .update(existingPerson.id, modifiedPerson)
           .then(newPerson => {
-            setPersons(persons.map(p => (p.id !== existingPerson.id ? p : newPerson)))
+            setPersons(persons.map(p => (p.id !== existingPerson.id ? p : newPerson)));
             setNotification({ message:`${newPerson.name}'s number has been changed to ${newPerson.number}`, type: "success" });
             setTimeout(() => setNotification({ message: null }), 5000);
           })
@@ -87,7 +87,7 @@ const App = () => {
           setNewName("");
           setNewNumber("");
       });
-    }
+    };
   };
 
   return (
