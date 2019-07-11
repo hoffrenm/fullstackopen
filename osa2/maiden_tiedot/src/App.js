@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-import Countries from "./components/Countries.js"
-import Filter from "./components/Filter.js"
+import Countries from "./components/Countries.js";
+import Filter from "./components/Filter.js";
 import "./App.css";
 
 const App = () => {
@@ -12,18 +12,26 @@ const App = () => {
     axios
       .get("https://restcountries.eu/rest/v2/all")
       .then(response => setCountries(response.data));
-  });
+  }, []);
 
   const handleFilterChange = event => {
     setFilter(event.target.value);
   };
 
+  const handleClick = countryName => {
+    setFilter(countryName);
+  };
+
   return (
     <div>
       <Filter handleChange={handleFilterChange} />
-      <Countries countries={countries} filter={filter} />
+      <Countries
+        countries={countries}
+        filter={filter}
+        handleClick={handleClick}
+      />
     </div>
-  )
+  );
 };
 
 export default App;

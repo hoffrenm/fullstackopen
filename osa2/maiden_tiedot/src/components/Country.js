@@ -1,5 +1,5 @@
 import React from "react";
-import Weather from "./Weather.js"
+import Weather from "./Weather.js";
 
 const Country = ({ country }) => {
   return (
@@ -9,9 +9,11 @@ const Country = ({ country }) => {
       <div>Population: {country.population}</div>
       <h3>Languages</h3>
       <ul>
-        {country.languages.map(l => <li key={l.name}>{l.name}</li>)}
+        {country.languages.map(l => (
+          <li key={l.name}>{l.name}</li>
+        ))}
       </ul>
-      <img src={country.flag} alt="Flag" width="250" height="150"></img>
+      <img src={country.flag} alt="Flag" width="250" height="150" />
       <Weather location={country.capital} />
     </div>
   );
