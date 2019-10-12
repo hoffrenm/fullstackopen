@@ -1,6 +1,7 @@
 const blogsRouter = require("express").Router();
 const Blog = require("../models/blog");
 const User = require("../models/user");
+const jwt = require("jsonwebtoken");
 
 blogsRouter.get("/", async (request, response) => {
   const blogs = await Blog.find({}).populate("user", { username: 1, name: 1 });
@@ -8,15 +9,19 @@ blogsRouter.get("/", async (request, response) => {
   response.json(blogs.map(blog => blog.toJSON()));
 });
 
-blogsRouter.post("/", async (request, response) => {
+blogsRouter.post("/", async (request, response, next) => {
   if (request.body.title === undefined || request.body.url === undefined) {
     return response.status(400).end();
   }
 
   try {
-    const users = await User.find({});
+    const decodedToken = jwt.verify(request.token, process.env.SECRET);
 
-    const user = users[0];
+    if (!request.token || !decodedToken.id) {
+      return response.status(401).json({ error: "token missing or invalid" });
+    }
+
+    const user = await User.findById(decodedToken.id);
 
     const blog = new Blog({
       ...request.body,
@@ -26,22 +31,38 @@ blogsRouter.post("/", async (request, response) => {
 
     const result = await blog.save();
 
-    user.blogs = user.blogs.concat(result._id)
+    user.blogs = user.blogs.concat(result._id);
 
-    await user.save()
+    await user.save();
 
     response.json(result.toJSON());
-  } catch (exception) {}
+  } catch (exception) {
+    next(exception);
+  }
 });
 
-blogsRouter.delete("/:id", async (request, response) => {
+blogsRouter.delete("/:id", async (request, response, next) => {
   try {
-    await Blog.findByIdAndRemove(request.params.id);
+    const decodedToken = jwt.verify(request.token, process.env.SECRET);
+
+    if (!request.token || !decodedToken.id) {
+      return response.status(401).json({ error: "token missing or invalid" });
+    }
+
+    const blog = await Blog.findById(request.params.id);
+
+    if (blog.user.toString() !== decodedToken.id) {
+      return response.status(401).json({ error: "unauthorized user"});
+    }
+
+    await blog.remove();
     response.status(204).end();
-  } catch (exception) {}
+  } catch (exception) {
+    next(exception);
+  }
 });
 
-blogsRouter.put("/:id", async (request, response) => {
+blogsRouter.put("/:id", async (request, response, next) => {
   const blog = { ...request.body };
 
   try {
@@ -49,7 +70,9 @@ blogsRouter.put("/:id", async (request, response) => {
       new: true
     });
     response.json(result.toJSON());
-  } catch (exception) {}
+  } catch (exception) {
+    next(exception);
+  }
 });
 
 module.exports = blogsRouter;
