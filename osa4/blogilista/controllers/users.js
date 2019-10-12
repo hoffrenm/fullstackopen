@@ -18,7 +18,7 @@ usersRouter.post("/", async (request, response, next) => {
             return response.status(400).json({ error: "username is already in use"})
         }
     } else {
-        return response.status(400).json({ error: "username and/or password should be atleast 3 digits long"})
+        return response.status(400).json({ error: "username and password should be atleast 3 digits long"})
     }
     
     const saltRounds = 10;
