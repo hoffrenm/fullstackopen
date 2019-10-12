@@ -35,7 +35,7 @@ describe("Retrieving blogs from db", () => {
       await api
         .post("/api/blogs")
         .send(helper.newBlog)
-        .expect(201)
+        .expect(200)
         .expect("Content-Type", /application\/json/);
 
       const response = await api.get("/api/blogs");
@@ -50,7 +50,7 @@ describe("Retrieving blogs from db", () => {
       const response = await api
         .post("/api/blogs")
         .send(helper.noLikes)
-        .expect(201)
+        .expect(200)
         .expect("Content-Type", /application\/json/);
 
       expect(response.body.likes).toBeDefined();
@@ -74,7 +74,7 @@ describe("Retrieving blogs from db", () => {
       const savedBlog = await api
         .post("/api/blogs")
         .send(helper.newBlog)
-        .expect(201);
+        .expect(200);
 
       let response = await api.get("/api/blogs");
       let blogTitles = response.body.map(blog => blog.title);
@@ -101,7 +101,7 @@ describe("Retrieving blogs from db", () => {
       await api
         .put(`/api/blogs/${modifiedBlog.id}`)
         .send(modifiedBlog)
-        .expect(204);
+        .expect(200);
 
       response = await api.get("/api/blogs")
 
