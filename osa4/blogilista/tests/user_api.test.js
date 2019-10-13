@@ -33,7 +33,8 @@ describe("when there is initially one user at db", () => {
     expect(usernames).toContain(helper.newuser.username);
   });
 
-  test("dublicate username is rejected", async () => {
+  describe("fails when", () => {
+    test("dublicate username", async () => {
       const existingUser = {
         username: "root",
         name: "Ro Juut",
@@ -46,6 +47,23 @@ describe("when there is initially one user at db", () => {
         .expect(400)
         .expect("Content-Type", /application\/json/);
     });
+
+    test("invalid username", async () => {
+      await api
+        .post("/api/users")
+        .send(helper.invalidUsername)
+        .expect(400)
+        .expect("Content-Type", /application\/json/);
+    });
+
+    test("invalid password", async () => {
+      await api
+        .post("/api/users")
+        .send(helper.invalidPassword)
+        .expect(400)
+        .expect("Content-Type", /application\/json/);
+    });
+  });
 });
 
 afterAll(() => {
