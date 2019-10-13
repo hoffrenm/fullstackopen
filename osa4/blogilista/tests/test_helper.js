@@ -51,6 +51,18 @@ const newuser = {
   password: "meow"
 };
 
+const invalidUsername = {
+  username: "a",
+  name: "Tom Cat",
+  password: "meow"
+};
+
+const invalidPassword = {
+  username: "dog",
+  name: "Tom Cat",
+  password: "w"
+};
+
 module.exports = {
   initialBlogs,
   blogsInDb,
@@ -58,5 +70,7 @@ module.exports = {
   invalidBlog,
   noLikes,
   usersInDb,
-  newuser
+  newuser,
+  invalidUsername,
+  invalidPassword
 };
