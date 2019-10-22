@@ -2,7 +2,9 @@ import React, { useState, useEffect } from "react";
 import blogService from "./services/blogs";
 import loginService from "./services/login";
 import Blog from "./components/Blog";
+import Loginform from "./components/Loginform";
 import Blogform from "./components/Blogform";
+import Togglable from "./components/Togglable";
 
 const App = () => {
   const [username, setUsername] = useState("");
@@ -40,18 +42,6 @@ const App = () => {
     }
   };
 
-  const handleTitleChange = event => {
-    setTitle(event.target.value);
-  };
-
-  const handleUrlChange = event => {
-    setUrl(event.target.value);
-  };
-
-  const handleAuthorChange = event => {
-    setAuthor(event.target.value);
-  };
-
   useEffect(() => {
     const loggedUserJSON = window.localStorage.getItem("loggedBlogappUser");
 
@@ -67,40 +57,8 @@ const App = () => {
     blogService.getAll().then(initialBlogs => setBlogs(initialBlogs));
   }, []);
 
-  const loginForm = () => {
-    return (
-      <div>
-        <h2>Login to application</h2>
-        <form onSubmit={handleLogin}>
-          <div>
-            username{" "}
-            <input
-              type="text"
-              value={username}
-              name="Username"
-              onChange={({ target }) => setUsername(target.value)}
-            />
-          </div>
-
-          <div>
-            password{" "}
-            <input
-              type="password"
-              value={password}
-              name="Password"
-              onChange={({ target }) => setPassword(target.value)}
-            />
-          </div>
-
-          <button type="submit">Login</button>
-        </form>
-      </div>
-    );
-  };
-
   const addBlog = event => {
     event.preventDefault();
-    console.log("Tallennetaan");
 
     const newBlog = {
       title,
@@ -115,7 +73,7 @@ const App = () => {
         setTitle("");
         setUrl("");
         setAuthor("");
-        
+
         setNotification(`Created '${response.title}' by ${response.author}`);
         setTimeout(() => {
           setNotification(null);
@@ -145,22 +103,32 @@ const App = () => {
 
       <div>
         {user === null ? (
-          loginForm()
+          <Togglable buttonLabel="Show login">
+            <Loginform
+              handleSubmit={handleLogin}
+              usernameField={username}
+              passwordField={password}
+              handleUsernameChange={({ target }) => setUsername(target.value)}
+              handlePasswordChange={({ target }) => setPassword(target.value)}
+            />
+          </Togglable>
         ) : (
           <div>
             <h1>Blogs</h1>
             <p>Logged in as `{user.name}`</p>
             <button onClick={handleLogout}>Logout</button>
             {allBlogs()}
-            <Blogform
-              handleSubmit={addBlog}
-              titleField={title}
-              authorField={author}
-              urlField={url}
-              handleTitleChange={handleTitleChange}
-              handleAuthorChange={handleAuthorChange}
-              handleUrlChange={handleUrlChange}
-            />
+            <Togglable buttonLabel="Add blog">
+              <Blogform
+                handleSubmit={addBlog}
+                titleField={title}
+                authorField={author}
+                urlField={url}
+                handleTitleChange={({ target }) => setTitle(target.value)}
+                handleAuthorChange={({ target }) => setAuthor(target.value)}
+                handleUrlChange={({ target }) => setUrl(target.value)}
+              />
+            </Togglable>
           </div>
         )}
       </div>
