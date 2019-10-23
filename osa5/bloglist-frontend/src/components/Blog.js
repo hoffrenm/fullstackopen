@@ -43,8 +43,8 @@ const Blog = ({ blog, handleUpdate, handleDelete, showDelete }) => {
   };
 
   const removeButton = () => {
-    console.log(showDelete)
-    
+    console.log(showDelete);
+
     if (showDelete) {
       return (
         <button type="button" onClick={removeBlog}>

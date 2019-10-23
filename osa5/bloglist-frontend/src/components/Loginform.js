@@ -1,4 +1,5 @@
 import React from "react";
+import PropTypes from "prop-types";
 
 const Loginform = ({
   handleSubmit,
@@ -37,4 +38,12 @@ const Loginform = ({
   );
 };
 
-export default Loginform
+Loginform.propTypes = {
+  usernameField: PropTypes.string.isRequired,
+  passwordField: PropTypes.string.isRequired,
+  handleUsernameChange: PropTypes.func.isRequired,
+  handlePasswordChange: PropTypes.func.isRequired,
+  handleSubmit: PropTypes.func.isRequired
+};
+
+export default Loginform;

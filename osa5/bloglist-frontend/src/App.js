@@ -80,6 +80,7 @@ const App = () => {
         }, 5000);
       })
       .catch(exception => {
+        console.log(exception);
         setNotification("Error creating a blog, check fields");
         setTimeout(() => {
           setNotification(null);
