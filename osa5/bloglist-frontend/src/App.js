@@ -16,6 +16,21 @@ const App = () => {
   const [url, setUrl] = useState("");
   const [notification, setNotification] = useState(null);
 
+  useEffect(() => {
+    const loggedUserJSON = window.localStorage.getItem("loggedBlogappUser");
+
+    if (loggedUserJSON) {
+      const user = JSON.parse(loggedUserJSON);
+
+      setUser(user);
+      blogService.setToken(user.token);
+    }
+  }, []);
+
+  useEffect(() => {
+    blogService.getAll().then(initialBlogs => setBlogs(initialBlogs));
+  }, []);
+
   const handleLogout = event => {
     event.preventDefault();
     window.localStorage.removeItem("loggedBlogappUser");
@@ -41,21 +56,6 @@ const App = () => {
       }, 5000);
     }
   };
-
-  useEffect(() => {
-    const loggedUserJSON = window.localStorage.getItem("loggedBlogappUser");
-
-    if (loggedUserJSON) {
-      const user = JSON.parse(loggedUserJSON);
-
-      setUser(user);
-      blogService.setToken(user.token);
-    }
-  }, []);
-
-  useEffect(() => {
-    blogService.getAll().then(initialBlogs => setBlogs(initialBlogs));
-  }, []);
 
   const addBlog = event => {
     event.preventDefault();
@@ -87,12 +87,30 @@ const App = () => {
       });
   };
 
+  const handleUpdate = updatedBlog => {
+    setBlogs(
+      blogs.map(blog => (blog.id !== updatedBlog.id ? blog : updatedBlog))
+    );
+  };
+
+  const handleDelete = deletedBlog => {
+    setBlogs(blogs.filter(blog => blog.id !== deletedBlog.id));
+  };
+
   const allBlogs = () => {
     return (
       <div>
-        {blogs.map(blog => (
-          <Blog key={blog.id} blog={blog} />
-        ))}
+        {blogs
+          .sort((a, b) => b.likes > a.likes)
+          .map(blog => (
+            <Blog
+              key={blog.id}
+              blog={blog}
+              handleUpdate={handleUpdate}
+              handleDelete={handleDelete}
+              showDelete={blog.user.username === user.username}
+            />
+          ))}
       </div>
     );
   };
@@ -115,8 +133,10 @@ const App = () => {
         ) : (
           <div>
             <h1>Blogs</h1>
-            <p>Logged in as `{user.name}`</p>
-            <button onClick={handleLogout}>Logout</button>
+            <p>
+              Logged in as `{user.name}`
+              <button onClick={handleLogout}>Logout</button>
+            </p>
             {allBlogs()}
             <Togglable buttonLabel="Add blog">
               <Blogform
