@@ -43,8 +43,6 @@ const Blog = ({ blog, handleUpdate, handleDelete, showDelete }) => {
   };
 
   const removeButton = () => {
-    console.log(showDelete);
-
     if (showDelete) {
       return (
         <button type="button" onClick={removeBlog}>
@@ -57,9 +55,13 @@ const Blog = ({ blog, handleUpdate, handleDelete, showDelete }) => {
   };
 
   return (
-    <div onClick={() => setVisible(!visible)} style={blogStyle}>
+    <div
+      className="blog"
+      onClick={() => setVisible(!visible)}
+      style={blogStyle}
+    >
       {blog.title} {blog.author}
-      <div style={showDetails}>
+      <div className="details" style={showDetails}>
         <a href={blog.url}>{blog.url}</a>
         <div onClick={e => e.stopPropagation()}>
           <p>
