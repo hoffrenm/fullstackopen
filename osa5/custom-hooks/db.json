@@ -1,0 +1,89 @@
+{
+  "notes": [
+    {
+      "content": "custom-hooks are awesome!",
+      "id": 1
+    },
+    {
+      "content": "best feature ever <3",
+      "id": 2
+    },
+    {
+      "content": "Uusi note",
+      "id": 3
+    },
+    {
+      "content": "Uusi muistiinano",
+      "id": 4
+    },
+    {
+      "content": "Testitesti",
+      "id": 5
+    },
+    {
+      "content": "Uusin testinote 1",
+      "id": 6
+    },
+    {
+      "content": "Test",
+      "id": 7
+    },
+    {
+      "content": "Test",
+      "id": 8
+    },
+    {
+      "content": "Test",
+      "id": 9
+    },
+    {
+      "content": "Test",
+      "id": 10
+    },
+    {
+      "content": "",
+      "id": 11
+    },
+    {
+      "content": "",
+      "id": 12
+    }
+  ],
+  "persons": [
+    {
+      "name": "mluukkai",
+      "number": "040-5483923",
+      "id": 1
+    },
+    {
+      "name": "Minä",
+      "number": "123456",
+      "id": 2
+    },
+    {
+      "name": "Minä",
+      "number": "9999",
+      "id": 3
+    },
+    {
+      "name": "Uusi Henkilö",
+      "number": "123",
+      "id": 4
+    },
+    {
+      "name": "Kappakeepo",
+      "number": "123123",
+      "id": 5
+    },
+    {
+      "name": "Kappakeepo",
+      "number": "123123",
+      "id": 6
+    },
+    {
+      "name": "Kappakeepo",
+      "number": "123123",
+      "id": 7
+    }
+  ]
+}
