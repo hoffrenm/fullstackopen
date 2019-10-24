@@ -25,11 +25,17 @@ const Blog = ({ blog, handleUpdate, handleDelete, showDelete }) => {
   const removeBlog = async event => {
     event.preventDefault();
 
-    try {
-      await blogService.remove(blog.id);
-      handleDelete(blog);
-    } catch (exception) {
-      console.log("Error while deleting");
+    if (
+      window.confirm(
+        `You are deleting ${blog.title} by ${blog.author}, confirm?`
+      )
+    ) {
+      try {
+        await blogService.remove(blog.id);
+        handleDelete(blog);
+      } catch (exception) {
+        console.log("Error while deleting");
+      }
     }
   };
 
