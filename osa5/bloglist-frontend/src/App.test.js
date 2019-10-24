@@ -13,6 +13,7 @@ describe("<App />", () => {
     const blogs = component.container.querySelectorAll(".blog");
 
     expect(blogs.length).toBe(0);
+    expect(component.container).toHaveTextContent("Login");
     expect(component.container).not.toHaveTextContent(
       "How to test a react app"
     );
@@ -39,6 +40,6 @@ describe("<App />", () => {
     expect(component.container).toHaveTextContent("How to test a react app");
     expect(component.container).toHaveTextContent("Another blog about tests");
     expect(component.container).toHaveTextContent("Tom Test");
-    expect(component.container).not.toHaveTextContent("login");
+    expect(component.container).not.toHaveTextContent("Login");
   });
 });
