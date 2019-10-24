@@ -1,35 +1,17 @@
 import React from "react";
 import PropTypes from "prop-types";
 
-const Loginform = ({
-  handleSubmit,
-  usernameField,
-  passwordField,
-  handleUsernameChange,
-  handlePasswordChange
-}) => {
+const Loginform = ({ handleSubmit, username, password }) => {
   return (
     <div className="loginform">
       <h2>Login to application</h2>
       <form onSubmit={handleSubmit}>
         <div>
-          username{" "}
-          <input
-            type="text"
-            value={usernameField}
-            name="Username"
-            onChange={handleUsernameChange}
-          />
+          username <input {...username} reset={null} />
         </div>
 
         <div>
-          password{" "}
-          <input
-            type="password"
-            value={passwordField}
-            name="Password"
-            onChange={handlePasswordChange}
-          />
+          password <input {...password} reset={null} />
         </div>
 
         <button type="submit">Login</button>
@@ -39,11 +21,13 @@ const Loginform = ({
 };
 
 Loginform.propTypes = {
-  usernameField: PropTypes.string.isRequired,
-  passwordField: PropTypes.string.isRequired,
-  handleUsernameChange: PropTypes.func.isRequired,
-  handlePasswordChange: PropTypes.func.isRequired,
-  handleSubmit: PropTypes.func.isRequired
+  handleSubmit: PropTypes.func.isRequired,
+  username: PropTypes.object.isRequired,
+  password: PropTypes.object.isRequired
+  // usernameField: PropTypes.string.isRequired,
+  // passwordField: PropTypes.string.isRequired,
+  // handleUsernameChange: PropTypes.func.isRequired,
+  // handlePasswordChange: PropTypes.func.isRequired,
 };
 
 export default Loginform;

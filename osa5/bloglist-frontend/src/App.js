@@ -5,15 +5,13 @@ import Blog from "./components/Blog";
 import Loginform from "./components/Loginform";
 import Blogform from "./components/Blogform";
 import Togglable from "./components/Togglable";
+import { useField } from "./hooks/index";
 
 const App = () => {
-  const [username, setUsername] = useState("");
-  const [password, setPassword] = useState("");
+  const username = useField("text");
+  const password = useField("password");
   const [user, setUser] = useState(null);
   const [blogs, setBlogs] = useState([]);
-  const [title, setTitle] = useState("");
-  const [author, setAuthor] = useState("");
-  const [url, setUrl] = useState("");
   const [notification, setNotification] = useState(null);
 
   useEffect(() => {
@@ -41,51 +39,32 @@ const App = () => {
   const handleLogin = async event => {
     event.preventDefault();
     try {
-      const user = await loginService.login({ username, password });
+      const name = username.value;
+      const pass = password.value;
+
+      const user = await loginService.login({ username: name, password: pass });
 
       window.localStorage.setItem("loggedBlogappUser", JSON.stringify(user));
 
       setUser(user);
-      setUsername("");
-      setPassword("");
+      username.reset();
+      password.reset();
       blogService.setToken(user.token);
     } catch (exception) {
-      setNotification("Wrong username or password");
-      setTimeout(() => {
-        setNotification(null);
-      }, 5000);
+      console.log(exception);
+      handleNotification("Wrong username or password");
     }
   };
 
-  const addBlog = event => {
-    event.preventDefault();
+  const handleNotification = message => {
+    setNotification(`${message}`);
+    setTimeout(() => {
+      setNotification(null);
+    }, 5000);
+  };
 
-    const newBlog = {
-      title,
-      author,
-      url
-    };
-
-    blogService
-      .create(newBlog)
-      .then(response => {
-        setBlogs(blogs.concat(response));
-        setTitle("");
-        setUrl("");
-        setAuthor("");
-
-        setNotification(`Created '${response.title}' by ${response.author}`);
-        setTimeout(() => {
-          setNotification(null);
-        }, 5000);
-      })
-      .catch(exception => {
-        console.log(exception);
-        setNotification("Error creating a blog, check fields");
-        setTimeout(() => {
-          setNotification(null);
-        }, 5000);
-      });
+  const handleAddBlog = newBlog => {
+    setBlogs(blogs.concat(newBlog));
   };
 
   const handleUpdate = updatedBlog => {
@@ -129,10 +108,8 @@ const App = () => {
           <Togglable buttonLabel="Show login">
             <Loginform
               handleSubmit={handleLogin}
-              usernameField={username}
-              passwordField={password}
-              handleUsernameChange={({ target }) => setUsername(target.value)}
-              handlePasswordChange={({ target }) => setPassword(target.value)}
+              username={username}
+              password={password}
             />
           </Togglable>
         ) : (
@@ -145,13 +122,8 @@ const App = () => {
             {allBlogs()}
             <Togglable buttonLabel="Add blog">
               <Blogform
-                handleSubmit={addBlog}
-                titleField={title}
-                authorField={author}
-                urlField={url}
-                handleTitleChange={({ target }) => setTitle(target.value)}
-                handleAuthorChange={({ target }) => setAuthor(target.value)}
-                handleUrlChange={({ target }) => setUrl(target.value)}
+                addBlog={handleAddBlog}
+                sendNotification={handleNotification}
               />
             </Togglable>
           </div>
