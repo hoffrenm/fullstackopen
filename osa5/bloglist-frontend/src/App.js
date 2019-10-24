@@ -99,21 +99,25 @@ const App = () => {
   };
 
   const allBlogs = () => {
-    return (
-      <div>
-        {blogs
-          .sort((a, b) => b.likes > a.likes)
-          .map(blog => (
-            <Blog
-              key={blog.id}
-              blog={blog}
-              handleUpdate={handleUpdate}
-              handleDelete={handleDelete}
-              showDelete={blog.user.username === user.username}
-            />
-          ))}
-      </div>
-    );
+    if (user) {
+      return (
+        <div className="blogs">
+          {blogs
+            .sort((a, b) => b.likes > a.likes)
+            .map(blog => (
+              <Blog
+                key={blog.id}
+                blog={blog}
+                handleUpdate={handleUpdate}
+                handleDelete={handleDelete}
+                showDelete={blog.user.username === user.username}
+              />
+            ))}
+        </div>
+      );
+    }
+
+    return <div className="blogs"></div>;
   };
 
   return (

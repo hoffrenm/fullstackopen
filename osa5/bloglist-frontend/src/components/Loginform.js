@@ -9,7 +9,7 @@ const Loginform = ({
   handlePasswordChange
 }) => {
   return (
-    <div>
+    <div className="loginform">
       <h2>Login to application</h2>
       <form onSubmit={handleSubmit}>
         <div>
